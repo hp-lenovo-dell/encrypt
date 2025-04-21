@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureCrypt | Encryption App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --secondary: #00cec9;
+        --dark: #2d3436;
+        --light: #f5f6fa;
+        --success: #00b894;
+        --danger: #d63031;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: var(--dark);
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 500px;
+        transition: transform 0.3s ease;
+      }
+
+      .container:hover {
+        transform: translateY(-5px);
+      }
+
+      .app-header {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .app-title {
+        color: var(--primary);
+        font-size: 2.2rem;
+        margin-bottom: 5px;
+        font-weight: 700;
+      }
+
+      .app-subtitle {
+        color: var(--dark);
+        opacity: 0.7;
+        font-weight: 400;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .input-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
+        font-family: "Poppins", sans-serif;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .btn-encrypt {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .btn-encrypt:hover {
+        background-color: var(--primary-dark);
+        box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      }
+
+      .btn-decrypt {
+        background-color: var(--secondary);
+        color: white;
+      }
+
+      .btn-decrypt:hover {
+        background-color: #00b5b2;
+        box-shadow: 0 5px 15px rgba(0, 206, 201, 0.4);
+      }
+
+      .result-container {
+        position: relative;
+      }
+
+      .copy-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 5px;
+        padding: 5px 8px;
+        font-size: 0.8rem;
+        color: var(--dark);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .copy-btn:hover {
+        background-color: white;
+        color: var(--primary);
+      }
+
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        color: white;
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 20px;
+        }
+
+        .app-title {
+          font-size: 1.8rem;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="app-header">
+        <h1 class="app-title">SecureCrypt</h1>
+        <p class="app-subtitle">Your secure message encryption tool</p>
+      </div>
+
+      <div class="input-group">
+        <label for="message" class="input-label">Message</label>
+        <textarea
+          id="message"
+          placeholder="Type your secret message here..."
+        ></textarea>
+      </div>
+
+      <div class="input-group">
+        <label for="key" class="input-label">Encryption Key</label>
+        <input type="text" id="key" placeholder="Enter your secret key..." />
+      </div>
+
+      <div class="button-group">
+        <button onclick="encrypt()" class="btn-encrypt">🔒 Encrypt</button>
+        <button onclick="decrypt()" class="btn-decrypt">🔓 Decrypt</button>
+      </div>
+
+      <div class="input-group result-container">
+        <label for="result" class="input-label">Result</label>
+        <textarea
+          id="result"
+          placeholder="Your encrypted/decrypted message will appear here..."
+          readonly
+        ></textarea>
+        <span class="copy-btn" onclick="copyResult()">Copy</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        SecureCrypt &copy; 2023 | All messages are processed locally in your
+        browser
+      </p>
+    </div>
+
+    <script>
+      // Define the allowed characters for encrypted output
+      const allowedChars =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&é\"'(-è_çà)=$*ù!:;,";
+
+      function encrypt() {
+        const message = document.getElementById("message").value;
+        const key = document.getElementById("key").value;
+
+        if (!message || !key) {
+          alert("Please enter both message and key!");
+          return;
+        }
+
+        // Convert message to encrypted format
+        let encryptedData = "";
+        for (let i = 0; i < message.length; i++) {
+          // Get the character code
+          const charCode = message.charCodeAt(i);
+
+          // Use the key to create a shift amount
+          const keyChar = key.charCodeAt(i % key.length);
+          const shift = keyChar % allowedChars.length;
+
+          // Convert to hex and add padding
+          let hexValue = (charCode + shift).toString(16).padStart(4, "0");
+
+          // Convert hex to allowed characters (each hex digit becomes 2 characters)
+          for (let j = 0; j < hexValue.length; j++) {
+            const hexDigit = parseInt(hexValue[j], 16);
+            const index1 = hexDigit % allowedChars.length;
+            const index2 = (hexDigit + shift) % allowedChars.length;
+
+            encryptedData += allowedChars[index1] + allowedChars[index2];
+          }
+
+          // Add a separator from allowedChars
+          encryptedData +=
+            allowedChars[(charCode + keyChar) % allowedChars.length];
+        }
+
+        // Add signature to verify correct decryption
+        const signature = createSignature(key);
+        const result = signature + encryptedData;
+
+        document.getElementById("result").value = result;
+      }
+
+      function decrypt() {
+        const encrypted = document.getElementById("message").value;
+        const key = document.getElementById("key").value;
+
+        if (!encrypted || !key) {
+          alert("Please enter both encrypted message and key!");
+          return;
+        }
+
+        // Verify signature (first 6 characters)
+        const signature = createSignature(key);
+        if (encrypted.substring(0, signature.length) !== signature) {
+          document.getElementById("result").value =
+            "Decryption failed: Invalid key or encrypted message";
+          return;
+        }
+
+        // Remove signature
+        const encryptedData = encrypted.substring(signature.length);
+
+        // Process the encrypted data
+        let decryptedText = "";
+        let i = 0;
+
+        while (i < encryptedData.length) {
+          // Get 8 characters (representing 4 hex digits) plus a separator
+          if (i + 8 >= encryptedData.length) break;
+
+          const chunk = encryptedData.substring(i, i + 8);
+          const separator = encryptedData.charAt(i + 8);
+
+          // Convert back to hex
+          let hexValue = "";
+          for (let j = 0; j < 8; j += 2) {
+            const char1 = chunk.charAt(j);
+            const char2 = chunk.charAt(j + 1);
+
+            const index1 = allowedChars.indexOf(char1);
+            const index2 = allowedChars.indexOf(char2);
+
+            if (index1 === -1 || index2 === -1) {
+              // Invalid character found
+              document.getElementById("result").value =
+                "Decryption failed: Corrupted data";
+              return;
+            }
+
+            // Recreate the hex digit
+            const keyChar = key.charCodeAt((i / 9) % key.length);
+            const shift = keyChar % allowedChars.length;
+
+            // Find the original hex digit
+            let hexDigit = index1;
+            if ((hexDigit + shift) % allowedChars.length !== index2) {
+              // Try to recover the correct value
+              for (let k = 0; k < 16; k++) {
+                if ((k + shift) % allowedChars.length === index2) {
+                  hexDigit = k;
+                  break;
+                }
+              }
+            }
+
+            hexValue += hexDigit.toString(16);
+          }
+
+          // Convert hex back to character
+          const charCode = parseInt(hexValue, 16);
+          const keyChar = key.charCodeAt((i / 9) % key.length);
+          const shift = keyChar % allowedChars.length;
+          const originalCharCode = charCode - shift;
+
+          decryptedText += String.fromCharCode(originalCharCode);
+
+          // Move to next chunk (8 chars + separator)
+          i += 9;
+        }
+
+        document.getElementById("result").value = decryptedText;
+      }
+
+      // Create a signature to verify the correct decryption key
+      function createSignature(key) {
+        let signature = "";
+        const hash = simpleHash(key);
+
+        for (let i = 0; i < 6; i++) {
+          const index = (hash * (i + 1)) % allowedChars.length;
+          signature += allowedChars[index];
+        }
+
+        return signature;
+      }
+
+      // Simple hash function for the key
+      function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = (hash << 5) - hash + str.charCodeAt(i);
+          hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash);
+      }
+
+      function copyResult() {
+        const result = document.getElementById("result");
+        result.select();
+        document.execCommand("copy");
+
+        // Show feedback
+        const copyBtn = document.querySelector(".copy-btn");
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copyBtn.textContent = "Copy";
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
